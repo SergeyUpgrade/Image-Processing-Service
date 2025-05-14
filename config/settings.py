@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-x+db%j@^vg8gdv08vbur*3s2hw9ankh6k&r*f4@2iq+6!u#$!a"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_tables2',
 
-    #'core',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -161,7 +161,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 # Django Debug Toolbar
 #INSTALLED_APPS += ['debug_toolbar']
 #MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
-INTERNAL_IPS = ['127.0.0.1']
+#INTERNAL_IPS = ['127.0.0.1']
 
 # Email
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

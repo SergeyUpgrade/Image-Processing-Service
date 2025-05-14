@@ -63,3 +63,111 @@
         </div>
     </div>
 {% endblock %}
+{% block scripts %}
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('image', document.getElementById('imageInput').files[0]);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+            try {
+                const response = await fetch('{% url "upload_image" %}', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    pollStatus(data.id, data.status_url);
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        function pollStatus(resultId, statusUrl) {
+            const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+            const statusContent = document.getElementById('statusContent');
+
+            statusContent.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Processing image...</p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                    </div>
+                </div>
+            `;
+
+            modal.show();
+
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(statusUrl);
+                    const data = await response.json();
+
+                    if (data.status === 'completed') {
+                        clearInterval(interval);
+                        statusContent.innerHTML = `
+                            <div class="alert alert-success">
+                                <h6>Processing Complete</h6>
+                                <p>File: ${data.filename}</p>
+                                <p>Result: <strong>${data.result}</strong></p>
+                                <p>Completed at: ${new Date(data.created_at).toLocaleString()}</p>
+                            </div>
+                        `;
+                        // Reload the page to show the new result in the table
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else if (data.status === 'failed') {
+                        clearInterval(interval);
+                        statusContent.innerHTML = `
+                            <div class="alert alert-danger">
+                                <h6>Processing Failed</h6>
+                                <p>File: ${data.filename}</p>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Error polling status:', error);
+                }
+            }, 1000);
+        }
+
+        // Bulk upload form handling
+        document.getElementById('bulkUploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!confirm('Are you sure you want to process 100 images? This may take a while.')) {
+                return;
+            }
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Started processing 100 images. Results will appear in the table when complete.');
+                    // Reload the page after a delay to show the pending entries
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    </script>
+{% endblock %}
