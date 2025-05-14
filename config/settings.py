@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_tables2',
 
-    'core',
+    #'core',
 ]
 
 MIDDLEWARE = [
@@ -159,8 +159,8 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 
 # Django Debug Toolbar
-INSTALLED_APPS += ['debug_toolbar']
-MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+#INSTALLED_APPS += ['debug_toolbar']
+#MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 INTERNAL_IPS = ['127.0.0.1']
 
 # Email
