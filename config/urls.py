@@ -17,7 +17,12 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from core.views import HomeView, UploadImageView, ProcessStatusView, BulkUploadTestView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('', HomeView.as_view(), name='home'),
+    path('upload/', UploadImageView.as_view(), name='upload_image'),
+    path('status/<int:result_id>/', ProcessStatusView.as_view(), name='status'),
+    path('bulk-upload/', BulkUploadTestView.as_view(), name='bulk_upload'),
 ]
