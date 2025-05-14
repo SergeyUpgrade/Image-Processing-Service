@@ -1,0 +1,65 @@
+{% extends "core/base.html" %}
+{% load django_tables2 crispy_forms_tags %}
+
+{% block content %}
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Upload Image</h5>
+                </div>
+                <div class="card-body">
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="file" class="form-control" name="image" id="imageInput" accept="image/jpeg,image/png" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Process Image</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Bulk Test</h5>
+                </div>
+                <div class="card-body">
+                    <form id="bulkUploadForm" enctype="multipart/form-data" action="{% url 'bulk_upload' %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="file" class="form-control" name="image" id="bulkImageInput" accept="image/jpeg,image/png" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning">Process 100 Images</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5>Processing Results</h5>
+        </div>
+        <div class="card-body">
+            {% render_table table %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Processing Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="statusContent"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
