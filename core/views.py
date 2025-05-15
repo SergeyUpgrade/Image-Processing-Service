@@ -1,7 +1,5 @@
-import time
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView
 from django.http import JsonResponse
 from django.urls import reverse
 from django_tables2 import SingleTableView

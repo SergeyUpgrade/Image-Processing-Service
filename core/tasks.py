@@ -7,6 +7,7 @@ from .models import ImageProcessingResult
 
 logger = get_task_logger(__name__)
 
+
 @shared_task(bind=True, max_retries=3)
 def process_image_task(self, result_id):
     try:
