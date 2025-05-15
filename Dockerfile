@@ -20,3 +20,6 @@ RUN pip install poetry && \
 COPY . /code/
 
 RUN python manage.py collectstatic --noinput
+
+# Explicitly set the gunicorn command
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]

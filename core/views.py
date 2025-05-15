@@ -38,12 +38,15 @@ class ProcessStatusView(View):
     def get(self, request, result_id):
         try:
             result = ImageProcessingResult.objects.get(id=result_id)
-            return JsonResponse({
+            response_data = {
                 'status': result.status,
                 'result': result.result,
                 'created_at': result.created_at.isoformat(),
                 'filename': result.image.name.split('/')[-1],
-            })
+                'processing_time': result.processing_time,
+                'queue_position': 0  # You can implement queue position later
+            }
+            return JsonResponse(response_data)
         except ImageProcessingResult.DoesNotExist:
             return JsonResponse({'error': 'Not found'}, status=404)
 
